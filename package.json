@@ -1,0 +1,75 @@
+{
+  "name": "cachecheats-server",
+  "version": "1.0.0",
+  "description": "REST API Server forCacheCheats app",
+  "main": "src/index.js",
+  "scripts": {
+    "dev": "nodemon src/index.js",
+    "start": "src/index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "express",
+    "rest",
+    "api"
+  ],
+  "author": "Kaj Lund",
+  "license": "ISC",
+  "devDependencies": {
+    "eslint": "^8.36.0",
+    "eslint-config-prettier": "^8.8.0",
+    "eslint-plugin-prettier": "^4.2.1",
+    "nodemon": "^2.0.22",
+    "prettier": "^2.8.7"
+  },
+  "dependencies": {
+    "cookie-parser": "^1.4.6",
+    "cors": "^2.8.5",
+    "dotenv": "^16.0.3",
+    "express": "^4.18.2",
+    "express-rate-limit": "^6.7.0",
+    "helmet": "^6.0.1",
+    "pino": "^8.11.0",
+    "pino-pretty": "^10.0.0",
+    "swagger-ui-express": "^4.6.2",
+    "xss-clean": "^0.1.1",
+    "yamljs": "^0.3.0"
+  },
+  "eslintConfig": {
+    "parserOptions": {
+      "ecmaVersion": 2018
+    },
+    "extends": [
+      "eslint:recommended",
+      "plugin:prettier/recommended"
+    ],
+    "plugins": [
+      "prettier"
+    ],
+    "env": {
+      "commonjs": true,
+      "es6": true,
+      "jest": true,
+      "node": true
+    },
+    "rules": {
+      "eqeqeq": "warn",
+      "no-console": "warn",
+      "no-unused-vars": [
+        "error",
+        {
+          "argsIgnorePattern": "req|res|next|val"
+        }
+      ],
+      "promise/catch-or-return": "off",
+      "prettier/prettier": "warn"
+    }
+  },
+  "prettier": {
+    "endOfLine": "lf",
+    "printWidth": 120,
+    "semi": false,
+    "singleQuote": true,
+    "tabWidth": 2
+  }
+}
