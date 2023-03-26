@@ -2,16 +2,16 @@ const cookieParser = require('cookie-parser')
 const cors = require('cors')
 const express = require('express')
 const helmet = require('helmet')
+const mongoose = require('mongoose')
 // const pino = require('pino-http')
 const rateLimit = require('express-rate-limit')
 const swaggerUI = require('swagger-ui-express')
 const xss = require('xss-clean')
 const yaml = require('yamljs')
 
-const swaggerDoc = yaml.load('./swagger.yaml')
-
 const logger = require('./utils/logger')
 const router = require('./router')
+const swaggerDoc = yaml.load('./swagger.yaml')
 
 // const whitelist = ['http://localhost:5173']
 // const corsOptions = {
@@ -73,14 +73,19 @@ class App {
 
   _setViewEngine() {}
 
-  initialize() {
+  async initialize() {
     this._setupMiddleware()
     this._setViewEngine()
     this._setupRoutes()
   }
 
-  start() {
-    this._listen()
+  async start() {
+    try {
+      await mongoose.connect(this.cnf.db.url)
+      this._listen()
+    } catch (err) {
+      logger.error(err)
+    }
   }
 }
 

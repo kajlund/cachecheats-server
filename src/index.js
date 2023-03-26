@@ -13,7 +13,12 @@ process.on('unhandledRejection', (reason, p) => {
   logger.error(`UNHANDLED PROMISE REJECTION: ${util.inspect(p)} reason: ${reason}`)
 })
 
-logger.info('Starting server')
-const app = new App(cnf)
-app.initialize()
-app.start()
+const startServer = async () => {
+  logger.info('Starting server')
+  const app = new App(cnf)
+  app.initialize()
+  await app.start()
+  logger.info('Server started')
+}
+
+startServer()

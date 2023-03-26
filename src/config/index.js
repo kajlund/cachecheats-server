@@ -9,11 +9,7 @@ const envConfig = require(`./${ENV}`) || {}
 const baseConfig = {
   cookieSecret: process.env.COOKIE_SECRET,
   db: {
-    user: process.env.PGUSER,
-    password: process.env.PGPASSWORD,
-    host: process.env.PGHOST,
-    database: process.env.PGDATABASE,
-    port: process.env.PGPORT,
+    url: process.env.MONGO_URI,
   },
   pageSize: parseInt(process.env.PAGE_SIZE) || 10,
   port: parseInt(process.env.PORT) || 8080,
@@ -21,9 +17,8 @@ const baseConfig = {
   saltRounds: parseInt(process.env.SALT_ROUNDS) || 12,
   jwtAccessTokenExpiresIn: '1d',
   jwtAccessTokenSecret: process.env.JWT_ACCESS_TOKEN_SECRET,
-  // Days to Milliseconds
-  jwtCookieExpiresIn: process.env.JWT_COOKIE_EXPIRES_IN * 24 * 60 * 60 * 1000,
-  jwtRefreshTokenSecret: process.env.JWT_REFRESH_TOKEN_SECRET,
+  // Days to seconds
+  jwtCookieExpiresIn: process.env.JWT_EXPIRES_IN * 24 * 60 * 60 * 1000,
   log: {
     level: 'debug',
   },
