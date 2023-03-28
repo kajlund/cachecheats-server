@@ -1,6 +1,7 @@
 exports.statusCodes = {
   OK: 200,
   CREATED: 201,
+  NO_CONTENT: 204,
   BAD_REQUEST: 400,
   UNAUTHORIZED: 401,
   NOT_FOUND: 404,
@@ -11,6 +12,7 @@ exports.statusCodes = {
 exports.reasonPhrases = {
   OK: 'OK',
   CREATED: 'Created',
+  NO_CONTENT: 'No content',
   BAD_REQUEST: 'Bad Request',
   UNAUTHORIZED: 'Unauthorized',
   NOT_FOUND: 'Not Found',

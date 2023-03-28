@@ -6,11 +6,13 @@ const { AppError } = require('./utils/errors')
 const { reasonPhrases, statusCodes } = require('./utils/statuscodes')
 
 // Import Route Objects
+const authRoutes = require('./api/auth/auth.routes')
+const userRoutes = require('./api/users/user.routes')
 
 class Router {
   constructor() {
     this.router = express.Router()
-    this.apiRoutes = []
+    this.apiRoutes = [authRoutes, userRoutes]
     this.webRoutes = []
   }
 
@@ -35,21 +37,48 @@ class Router {
 
   _handleExceptions() {
     this.router.use((err, req, res, _next) => {
-      err.statusCode = err.status || err.statusCode || statusCodes.INTERNAL_SERVER_ERROR
+      const error = {
+        statusCode: err.status || err.statusCode || statusCodes.INTERNAL_SERVER_ERROR,
+      }
+
+      if (err instanceof AppError) {
+        error.message = err.message
+        error.detail = err.detail
+      }
+
+      if (err.name === 'ValidationError') {
+        error.detail = Object.values(err.errors)
+          .map((item) => item.message)
+          .join(', ')
+        error.statusCode = statusCodes.BAD_REQUEST
+        error.message = reasonPhrases.BAD_REQUEST
+      }
+
+      if (err.code && err.code === 11000) {
+        error.statusCode = statusCodes.BAD_REQUEST
+        error.message = reasonPhrases.BAD_REQUEST
+        error.detail = `Duplicate value entered for ${Object.keys(err.keyValue)} field, please choose another value`
+      }
+
+      if (err.name === 'CastError') {
+        error.statusCode = statusCodes.NOT_FOUND
+        error.message = reasonPhrases.NOT_FOUND
+        error.detail = `No item found with id : ${err.value}`
+      }
 
       if (cnf.nodeEnv !== 'development' && !(err instanceof AppError)) {
-        if (err.statusCode <= statusCodes.BAD_REQUEST) {
-          err.message = reasonPhrases.BAD_REQUEST
-        } else if (err.statusCode >= statusCodes.INTERNAL_SERVER_ERROR) {
+        if (error.statusCode <= statusCodes.BAD_REQUEST) {
+          error.message = reasonPhrases.BAD_REQUEST
+        } else if (error.statusCode >= statusCodes.INTERNAL_SERVER_ERROR) {
           logger.error(err, 'Generic exception handler caught error:')
-          err.message = reasonPhrases.INTERNAL_SERVER_ERROR
+          error.message = reasonPhrases.INTERNAL_SERVER_ERROR
         }
       }
 
-      return res.status(err.statusCode).json({
+      return res.status(error.statusCode).json({
         success: false,
-        message: err.message,
-        errors: err.errors || [],
+        message: error.message,
+        detail: error.detail || '',
       })
     })
   }

@@ -24,6 +24,14 @@ exports.login = async (req, res) => {
 
 exports.register = async (req, res) => {
   const { name, email, password } = req.body
+  if (!(name && email && password)) {
+    throw new BadRequestError('name, email & password fields are required')
+  }
+  const found = await User.findOne({ email })
+  if (found) {
+    throw new BadRequestError('Email already registered')
+  }
+
   const user = await User.create({ name, email, password })
   const token = user.createJWT()
   res.status(statusCodes.CREATED).json({

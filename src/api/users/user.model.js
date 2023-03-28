@@ -8,7 +8,7 @@ const UserSchema = new mongoose.Schema(
   {
     name: {
       type: String,
-      required: [true, 'Please provide a name'],
+      required: [true, 'Please provide a name between 3 and 50 characters'],
       maxlength: 50,
       minlength: 3,
     },
@@ -31,6 +31,7 @@ const UserSchema = new mongoose.Schema(
       enum: ['', 'user', 'admin'],
       default: '',
     },
+    token: String,
   },
   { timestamps: true }
 )
@@ -41,7 +42,7 @@ UserSchema.pre('save', async function () {
 })
 
 UserSchema.methods.createJWT = function () {
-  return jwt.sign({ userId: this._id, name: this.name }, cnf.jwtAccessTokenSecret, {
+  return jwt.sign({ userId: this._id, email: this.email, name: this.name }, cnf.jwtAccessTokenSecret, {
     expiresIn: cnf.jwtAccessTokenExpiresIn,
   })
 }
