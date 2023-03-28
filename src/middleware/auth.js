@@ -6,11 +6,11 @@ const logger = require('../utils/logger')
 const User = require('../api/users/user.model')
 
 exports.auth = async (req, res, next) => {
-  const authHeader = req.headers.authorization
-  if (!authHeader || !authHeader.startsWith('Bearer')) {
+  const token = req.header('Authorization').replace('Bearer ', '') || ''
+  if (!token) {
     throw new UnauthorizedError('Invalid token')
   }
-  const token = authHeader.split(' ')[1]
+
   try {
     const decoded = jwt.verify(token, cnf.jwtAccessTokenSecret)
     // attach the user to request
