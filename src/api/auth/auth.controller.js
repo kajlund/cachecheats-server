@@ -1,3 +1,4 @@
+const cnf = require('../../config')
 const { BadRequestError, UnauthorizedError } = require('../../utils/errors')
 const { statusCodes } = require('../../utils/statuscodes')
 const User = require('../users/user.model')
@@ -16,6 +17,13 @@ exports.login = async (req, res) => {
     throw new UnauthorizedError('Invalid Credentials')
   }
   const token = user.createJWT()
+  // Set cookie
+  const options = {
+    expiresIn: cnf.jwtCookieExpiresIn,
+    httpOnly: true, // only readable on server
+  }
+  res.cookie('token', token, options)
+
   res.status(statusCodes.OK).json({
     token,
     user: { name: user.name, email: user.email, role: user.role },

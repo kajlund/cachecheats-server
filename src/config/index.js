@@ -17,7 +17,7 @@ const baseConfig = {
   saltRounds: parseInt(process.env.SALT_ROUNDS) || 12,
   jwtAccessTokenExpiresIn: '1d',
   jwtAccessTokenSecret: process.env.JWT_ACCESS_TOKEN_SECRET,
-  // Days to seconds
+  // Days to milliseconds
   jwtCookieExpiresIn: process.env.JWT_EXPIRES_IN * 24 * 60 * 60 * 1000,
   log: {
     level: 'debug',

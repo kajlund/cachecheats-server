@@ -6,7 +6,7 @@ const logger = require('../utils/logger')
 const User = require('../api/users/user.model')
 
 exports.auth = async (req, res, next) => {
-  const token = req.header('Authorization').replace('Bearer ', '') || ''
+  const token = req.header('Authorization') ? req.header('Authorization').replace('Bearer ', '') : req.cookies.token
   if (!token) {
     throw new UnauthorizedError('Invalid token')
   }
