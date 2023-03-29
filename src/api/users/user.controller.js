@@ -33,5 +33,6 @@ exports.updateUser = async (req, res) => {
     { name, email, role },
     { new: true, runValidators: true }
   ).select('-password')
+  if (!user) throw new NotFoundError(`No user with id ${req.params.id}`)
   res.status(statusCodes.OK).json({ user })
 }
