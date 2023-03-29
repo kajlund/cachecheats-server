@@ -8,11 +8,12 @@ const { reasonPhrases, statusCodes } = require('./utils/statuscodes')
 // Import Route Objects
 const authRoutes = require('./api/auth/auth.routes')
 const userRoutes = require('./api/users/user.routes')
+const placeRoutes = require('./api/places/place.routes')
 
 class Router {
   constructor() {
     this.router = express.Router()
-    this.apiRoutes = [authRoutes, userRoutes]
+    this.apiRoutes = [authRoutes, userRoutes, placeRoutes]
     this.webRoutes = []
   }
 
