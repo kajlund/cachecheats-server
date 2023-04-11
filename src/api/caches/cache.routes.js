@@ -9,7 +9,7 @@ const {
   findUserCaches,
   updateCache,
 } = require('./cache.handlers')
-const { auth } = require('../../middleware/auth')
+const { auth, admin } = require('../../middleware/auth')
 
 module.exports = {
   group: {
@@ -62,7 +62,7 @@ module.exports = {
     {
       method: 'delete',
       path: '/:id',
-      middleware: [],
+      middleware: [admin],
       handler: deleteCache,
     },
   ],
