@@ -3,12 +3,13 @@ const { statusCodes } = require('../../utils/statuscodes')
 const Cache = require('./cache.model')
 const Place = require('../places/place.model')
 
+const populate = [
+  { path: 'place', model: 'Place', select: 'name' },
+  { path: 'user', model: 'User', select: 'name' },
+]
+
 exports.allCaches = async (req, res) => {
-  const caches = await Cache.find()
-    .limit(req.paging.limit)
-    .skip(req.paging.skip)
-    .populate('place', ' id name')
-    .sort('-updatedAt')
+  const caches = await Cache.find().limit(req.paging.limit).skip(req.paging.skip).populate(populate).sort('-updatedAt')
 
   res.status(statusCodes.OK).json({
     success: true,
@@ -44,7 +45,7 @@ exports.deleteCache = async (req, res) => {
 }
 
 exports.findByCode = async (req, res) => {
-  const cache = await Cache.findOne({ gc: req.params.gc }).populate('place', 'id name')
+  const cache = await Cache.findOne({ gc: req.params.gc }).populate(populate)
   if (!cache) throw new NotFoundError()
 
   res.status(statusCodes.OK).json({
@@ -54,8 +55,8 @@ exports.findByCode = async (req, res) => {
   })
 }
 
-exports.findById = async (req, res) => {
-  const cache = await Cache.findById(req.params.id).populate('place', 'id name')
+exports.findCacheById = async (req, res) => {
+  const cache = await Cache.findById(req.params.id).populate(populate)
   if (!cache) throw new NotFoundError()
 
   res.status(statusCodes.OK).json({
@@ -67,7 +68,7 @@ exports.findById = async (req, res) => {
 
 exports.findPlaceCaches = async (req, res) => {
   const place = await Place.findById(req.params.id)
-  const caches = await Cache.find({ place: req.params.id }).populate('place', 'id name')
+  const caches = await Cache.find({ place: req.params.id }).populate(populate)
 
   res.status(statusCodes.OK).json({
     success: true,
@@ -78,7 +79,7 @@ exports.findPlaceCaches = async (req, res) => {
 }
 
 exports.findUserCaches = async (req, res) => {
-  const caches = await Cache.find({ user: req.user.id }).populate('place', 'id name')
+  const caches = await Cache.find({ user: req.user.id }).populate(populate)
 
   res.status(statusCodes.OK).json({
     success: true,
@@ -88,7 +89,7 @@ exports.findUserCaches = async (req, res) => {
   })
 }
 
-exports.updateOne = async (req, res) => {
+exports.updateCache = async (req, res) => {
   const { gc, kind, name, coords, verified, comments, place } = req.body
 
   const cache = await Cache.findByIdAndUpdate(

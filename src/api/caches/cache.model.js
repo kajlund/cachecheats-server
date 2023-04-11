@@ -58,7 +58,7 @@ const cacheSchema = new Schema(
     },
   },
   {
-    timestamp: true,
+    timestamps: true,
   }
 )
 
