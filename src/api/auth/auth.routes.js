@@ -1,4 +1,5 @@
-const { login, register } = require('./auth.controller')
+const { checkSession, login, register } = require('./auth.controller')
+const { auth } = require('../../middleware/auth')
 
 module.exports = {
   group: {
@@ -6,6 +7,12 @@ module.exports = {
     middleware: [],
   },
   routes: [
+    {
+      method: 'get',
+      path: '/auth',
+      middleware: [auth],
+      handler: checkSession,
+    },
     {
       method: 'post',
       path: '/login',

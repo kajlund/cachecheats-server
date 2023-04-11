@@ -3,6 +3,13 @@ const { BadRequestError, UnauthorizedError } = require('../../utils/errors')
 const { statusCodes } = require('../../utils/statuscodes')
 const User = require('../users/user.model')
 
+exports.checkSession = (req, res) => {
+  res.status(statusCodes.OK).json({
+    success: true,
+    message: 'Session OK',
+  })
+}
+
 exports.login = async (req, res) => {
   const { email, password } = req.body
   if (!email || !password) {
