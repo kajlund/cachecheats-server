@@ -1,1 +1,71 @@
 openapi: 3.0.0
+info:
+  title: CacheCheats
+  description: REST API for the CacheCheats app
+  version: 1.0.1
+
+server:
+  - url: http://localhost:5000
+    description: Dev server
+
+components:
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+    cookieAuth:
+      type:  apiKey
+      in: cookie
+      name: token
+
+paths:
+  /ping:
+    get:
+      responses:
+        '200':
+          description: OK
+
+  /api/register:
+    summary: Register a new user
+    description: >
+      Users can self-register by using this endpoint.
+      Creating a new user does not give the user rights to protected parts though.
+      Users need to be given a role of "user" to be authorized.
+    post:
+      responses:
+        '200':
+          description: Returns created user object
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  token:
+                    type: string
+                  user:
+                    type: object
+                    properties:
+                      name: string
+                      email: string
+                      role: string
+
+  /api/login:
+
+  /api/places:
+
+  /api/places/{id}:
+    summary: Get a place by id
+    description: >
+      Get place object by it's id
+    parameters:
+      - name: id
+        default: guid
+        in: path
+        schema:
+          type: string
+
+
+
+
+
+
