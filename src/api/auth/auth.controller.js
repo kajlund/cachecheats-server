@@ -26,7 +26,7 @@ exports.login = async (req, res) => {
 
   res.status(statusCodes.OK).json({
     token,
-    user: { name: user.name, email: user.email, role: user.role },
+    user: { id: user._id, name: user.name, email: user.email, role: user.role },
   })
 }
 
@@ -44,6 +44,6 @@ exports.register = async (req, res) => {
   const token = user.createJWT()
   res.status(statusCodes.CREATED).json({
     token,
-    user: { name: user.name, email: user.email, role: user.role },
+    user: { id: user._id, name: user.name, email: user.email, role: user.role },
   })
 }
